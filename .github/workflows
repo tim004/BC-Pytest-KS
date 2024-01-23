@@ -1,0 +1,40 @@
+name: Python Test Run
+run-name: ${{ github.actor }} is testing Python code
+on: [push]
+# on: [pull_request]
+jobs:
+  Test-Python-Code:
+    runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          # python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run:
+          pip install pytest
+          pip install pandas
+          pip install mock
+#           pip install ruff pytest
+#       - name: Lint with ruff
+#         run: |
+#           # stop the build if there are Python syntax errors or undefined names
+#           ruff --format=github --select=E9,F63,F7,F82 --target-version=py37 .
+#           # default set of ruff rules with GitHub Annotations
+#           ruff --format=github --target-version=py37 .
+
+      - name: Test with pytest
+        run: |
+          python -m pytest
+
+# Step 1: Commit this file --> Starts running pytest whenever commits are pushed to the branch.
+# Step 2: Comment out line 21, uncomment lines 22-28, Commit this file --> Adds linting check to your workflow
+# Step 3: Fix unused import that prevents the workflow from succeeding, commit the change
+# Step 4: Comment out line 16, Uncomment lines 8-10,17, Commit this file --> Test your python code with multiple Python versions
+# Step 5: Comment out line 3, Uncomment line 4, Commit this file --> Only run your workflow on a pull request
